@@ -48,21 +48,56 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
+-- Table `Base-de-datos-plataforma-streaming`.`Locacion`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `Base-de-datos-plataforma-streaming`.`Locacion` (
+  `idLocacion` INT NOT NULL AUTO_INCREMENT,
+  `Lugar` VARCHAR(100) NOT NULL,
+  `Capacidad` INT NOT NULL,
+  `Sectores` VARCHAR(100) NOT NULL,
+  PRIMARY KEY (`idLocacion`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `Base-de-datos-plataforma-streaming`.`Tickets`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `Base-de-datos-plataforma-streaming`.`Tickets` (
+  `idTickets` INT NOT NULL AUTO_INCREMENT,
+  `Precio` INT NOT NULL,
+  `Sector` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`idTickets`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
 -- Table `Base-de-datos-plataforma-streaming`.`Conciertos`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `Base-de-datos-plataforma-streaming`.`Conciertos` (
   `idConciertos` INT NOT NULL AUTO_INCREMENT,
   `nombreConcierto` VARCHAR(45) NOT NULL,
   `Fecha` VARCHAR(10) NOT NULL,
-  `Lugar` VARCHAR(45) NOT NULL,
-  `precioEntradas` INT NOT NULL,
   `idArtista/Banda` INT NOT NULL,
+  `idLocacion` INT NOT NULL,
+  `idTickets` INT NOT NULL,
   PRIMARY KEY (`idConciertos`),
   UNIQUE INDEX `idConciertos_UNIQUE` (`idConciertos` ASC) VISIBLE,
   INDEX `Artista_idx` (`idArtista/Banda` ASC) VISIBLE,
+  INDEX `lugar_concierto_idx` (`idLocacion` ASC) VISIBLE,
+  INDEX `tickets_conciertos_idx` (`idTickets` ASC) VISIBLE,
   CONSTRAINT `Artista`
     FOREIGN KEY (`idArtista/Banda`)
     REFERENCES `Base-de-datos-plataforma-streaming`.`Artista/Banda` (`idArtista/Banda`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `lugar_concierto`
+    FOREIGN KEY (`idLocacion`)
+    REFERENCES `Base-de-datos-plataforma-streaming`.`Locacion` (`idLocacion`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `tickets_conciertos`
+    FOREIGN KEY (`idTickets`)
+    REFERENCES `Base-de-datos-plataforma-streaming`.`Tickets` (`idTickets`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -131,7 +166,97 @@ CREATE TABLE IF NOT EXISTS `Base-de-datos-plataforma-streaming`.`Playlists` (
 ENGINE = InnoDB;
 
 
+-- -----------------------------------------------------
+-- Table `Base-de-datos-plataforma-streaming`.`Merchandising`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `Base-de-datos-plataforma-streaming`.`Merchandising` (
+  `idMerchandising` INT NOT NULL AUTO_INCREMENT,
+  `Producto` VARCHAR(45) NOT NULL,
+  `Precio` VARCHAR(45) NOT NULL,
+  `Descripcion` VARCHAR(200) NOT NULL,
+  `idArtista/Banda` INT NOT NULL,
+  PRIMARY KEY (`idMerchandising`),
+  UNIQUE INDEX `idMerchandising_UNIQUE` (`idMerchandising` ASC) VISIBLE,
+  INDEX `producto_artista_idx` (`idArtista/Banda` ASC) VISIBLE,
+  CONSTRAINT `producto_artista`
+    FOREIGN KEY (`idArtista/Banda`)
+    REFERENCES `Base-de-datos-plataforma-streaming`.`Artista/Banda` (`idArtista/Banda`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `Base-de-datos-plataforma-streaming`.`Videoclips`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `Base-de-datos-plataforma-streaming`.`Videoclips` (
+  `idVideoclip` INT NOT NULL AUTO_INCREMENT,
+  `Nombre` VARCHAR(45) NOT NULL,
+  `Duracion` VARCHAR(5) NOT NULL,
+  `idArtista/Banda` INT NOT NULL,
+  `idCanciones` INT NOT NULL,
+  PRIMARY KEY (`idVideoclip`),
+  INDEX `artista_videoclip_idx` (`idArtista/Banda` ASC) VISIBLE,
+  INDEX `cancion_videoclip_idx` (`idCanciones` ASC) VISIBLE,
+  CONSTRAINT `artista_videoclip`
+    FOREIGN KEY (`idArtista/Banda`)
+    REFERENCES `Base-de-datos-plataforma-streaming`.`Artista/Banda` (`idArtista/Banda`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `cancion_videoclip`
+    FOREIGN KEY (`idCanciones`)
+    REFERENCES `Base-de-datos-plataforma-streaming`.`Canciones` (`idCanciones`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `Base-de-datos-plataforma-streaming`.`Presentadores`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `Base-de-datos-plataforma-streaming`.`Presentadores` (
+  `idPresentador` INT NOT NULL AUTO_INCREMENT,
+  `Nombres` VARCHAR(100) NULL,
+  PRIMARY KEY (`idPresentador`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `Base-de-datos-plataforma-streaming`.`Podcasts`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `Base-de-datos-plataforma-streaming`.`Podcasts` (
+  `idPodcast` INT NOT NULL AUTO_INCREMENT,
+  `Nombre` VARCHAR(45) NOT NULL,
+  `Descripcion` VARCHAR(200) NOT NULL,
+  `Duracion` VARCHAR(5) NOT NULL,
+  `idPresentador` INT NOT NULL,
+  PRIMARY KEY (`idPodcast`),
+  INDEX `nombre_presentador_idx` (`idPresentador` ASC) VISIBLE,
+  CONSTRAINT `nombre_presentador`
+    FOREIGN KEY (`idPresentador`)
+    REFERENCES `Base-de-datos-plataforma-streaming`.`Presentadores` (`idPresentador`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `Base-de-datos-plataforma-streaming`.`Letras`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `Base-de-datos-plataforma-streaming`.`Letras` (
+  `idLetra` INT NOT NULL AUTO_INCREMENT,
+  `Letra` VARCHAR(500) NOT NULL,
+  `idCanciones` INT NOT NULL,
+  PRIMARY KEY (`idLetra`),
+  INDEX `letra_cancion_idx` (`idCanciones` ASC) VISIBLE,
+  CONSTRAINT `letra_cancion`
+    FOREIGN KEY (`idCanciones`)
+    REFERENCES `Base-de-datos-plataforma-streaming`.`Canciones` (`idCanciones`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
-
