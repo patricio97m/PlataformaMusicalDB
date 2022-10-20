@@ -622,7 +622,7 @@ begin
 	where T1.Producto like nombre_producto
     order by Producto ASC;
     
-    if (select Producto from merchandising where Producto like nombre_producto) is null then
+    if (select Producto from merchandising where Producto like nombre_producto LIMIT 1) is null then
     select 'No se encontraron resultados';
     end if;
 end
