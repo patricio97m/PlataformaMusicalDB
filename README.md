@@ -1,5 +1,4 @@
 # scriptsMySQL
-Repositorio para subir los scripts de SQL. 
 Archivos para un modelo de base de datos propia. 
 
 # Descripción
