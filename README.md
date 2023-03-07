@@ -4,7 +4,7 @@ Archivos para un modelo de base de datos propia.
 # Descripción
 Servicio de streaming similar a Spotify, YouTube Music, etc. Donde la base de la plataforma consiste en distintas bandas o artistas, las cuales poseen discos y canciones. Los discos o EPs deben contener canciones. Además, los usuarios que se registren pueden crear playlists para tener sus propias colecciones de canciones. Los artistas además pueden promocionarse en la plataforma ofreciendo información sobre sus próximos conciertos y vender su merchandising.
 
-#Documentación
+# Documentación
 https://drive.google.com/file/d/1as_av9xFZgoMcS0HfDlnPbl4_SoUvJcR/view?usp=share_link
 
 # Tablas
